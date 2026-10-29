@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دستیار صوتی و آموزش زبان انگلیسی هفتم (Prospect 1)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Vazirmatn Persian Font -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        body {
+            font-family: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background-color: rgba(156, 163, 175, 0.4);
+            border-radius: 9999px;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+        }
+        .speaking-active {
+            animation: pulse-ring 1.5s infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <button id="menuBtn" onclick="toggleMenu()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-400 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-brand-500/20">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-extrabold text-sm sm:text-base tracking-tight leading-tight text-slate-900 dark:text-white">انگلیسی پایه هفتم</h1>
+                        <p class="text-[10px] sm:text-xs text-brand-600 dark:text-brand-400 font-semibold" id="headerSubtitle">بخش ۱: My Name</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2">
+                <!-- Speed Toggle -->
+                <button id="speedBtn" onclick="toggleSpeed()" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 flex items-center gap-1.5 transition">
+                    <span id="speedIcon">🐰</span>
+                    <span id="speedText">سرعت: عادی</span>
+                </button>
+                <!-- Theme Toggle -->
+                <button onclick="toggleTheme()" class="w-9 h-9 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                    <i class="fa-solid fa-moon dark:hidden"></i>
+                    <i class="fa-solid fa-sun hidden dark:inline text-amber-400"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Drawer / Hamburger Menu -->
+    <div id="drawerOverlay" onclick="toggleMenu()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden transition-opacity opacity-0"></div>
+    <aside id="drawer" class="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 z-50 transform translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
+        <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2 font-bold text-slate-800 dark:text-white">
+                <i class="fa-solid fa-book-open text-brand-600 dark:text-brand-400"></i>
+                <span>فهرست درس‌ها و بخش‌ها</span>
+            </div>
+            <button onclick="toggleMenu()" class="w-8 h-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 flex items-center justify-center">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+        <div class="flex-1 overflow-y-auto custom-scroll p-3 space-y-1.5" id="drawerLinks">
+            <!-- Populated via JS -->
+        </div>
+        <div class="p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/40 text-xs text-slate-500 text-center">
+            بر اساس کتاب رسمی انگلیسی هفتم (Prospect 1)
+        </div>
+    </aside>
+
+    <!-- Main Container -->
+    <main class="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 space-y-6">
+
+        <!-- Universal Smart Search Bar -->
+        <section class="bg-white dark:bg-slate-800 rounded-2xl p-3 sm:p-4 shadow-sm border border-slate-200 dark:border-slate-700 relative">
+            <div class="relative flex items-center">
+                <i class="fa-solid fa-magnifying-glass absolute right-3.5 text-slate-400 text-base"></i>
+                <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="جستجوی هر کلمه انگلیسی یا فارسی (مثلاً name یا اسم)..." class="w-full pr-10 pl-24 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-900 border-0 focus:ring-2 focus:ring-brand-500 text-sm text-slate-800 dark:text-slate-100 placeholder-slate-400 font-medium">
+                <button onclick="speakInputText()" class="absolute left-2 px-3 py-1.5 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold flex items-center gap-1 shadow-sm transition">
+                    <i class="fa-solid fa-volume-high"></i>
+                    <span>تلفظ</span>
+                </button>
+            </div>
+            <!-- Live Search Dropdown -->
+            <div id="searchResults" class="hidden mt-3 pt-3 border-t border-slate-100 dark:border-slate-700/60 max-h-72 overflow-y-auto custom-scroll space-y-2">
+                <!-- Injected via JS -->
+            </div>
+        </section>
+
+        <!-- Current View Header & Navigation Tabs -->
+        <div id="sectionHeader" class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200 dark:border-slate-800">
+            <div>
+                <span id="currentBadge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-brand-100 dark:bg-brand-950/80 text-brand-700 dark:text-brand-300 inline-block mb-1">درس اول</span>
+                <h2 id="currentTitle" class="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">Lesson 1: My Name (نام من)</h2>
+            </div>
+            <!-- Tabs (Words, Page 6 Conversation, Page 8 Sounds, Practices, Sentences, Mini-Game, 20-Point Exam) -->
+            <div id="navTabs" class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 custom-scroll">
+                <button onclick="switchTab('words')" id="tab-words" class="tab-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-brand-600 text-white flex items-center gap-1.5 whitespace-nowrap shadow-sm">
+                    <i class="fa-solid fa-book"></i>
+                    <span>واژگان</span>
+                </button>
+                <button onclick="switchTab('page6')" id="tab-page6" class="tab-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 flex items-center gap-1.5 whitespace-nowrap transition">
+                    <i class="fa-solid fa-chalkboard-user text-indigo-500"></i>
+                    <span>مکالمه صفحه ۶</span>
+                </button>
+                <button onclick="switchTab('page8')" id="tab-page8" class="tab-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 flex items-center gap-1.5 whitespace-nowrap transition">
+                    <i class="fa-solid fa-spell-check text-rose-500"></i>
+                    <span>صدا و هجی صفحه ۸</span>
+                </button>
+                <button onclick="switchTab('dialogue')" id="tab-dialogue" class="tab-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 flex items-center gap-1.5 whitespace-nowrap transition">
+                    <i class="fa-solid fa-comments"></i>
+                    <span>مکالمات روبه‌رو</span>
+                </button>
+                <button onclick="switchTab('sentences')" id="tab-sentences" class="tab-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 flex items-center gap-1.5 whitespace-nowrap transition">
+                    <i class="fa-solid fa-quote-right"></i>
+                    <span>جملات کلیدی</span>
+                </button>
+                <button onclick="switchTab('minigame')" id="tab-minigame" class="tab-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-300 dark:hover:bg-slate-700 flex items-center gap-1.5 whitespace-nowrap transition">
+                    <i class="fa-solid fa-gamepad text-emerald-500"></i>
+                    <span>بازی لغات</span>
+                </button>
+                <button onclick="switchTab('exam')" id="tab-exam" class="tab-btn px-3 py-1.5 rounded-xl text-xs sm:text-sm font-bold bg-amber-500 hover:bg-amber-600 text-white flex items-center gap-1.5 whitespace-nowrap shadow-sm transition">
+                    <i class="fa-solid fa-award"></i>
+                    <span>آزمون ۲۰ سوالی</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content Panes -->
+        <div id="viewContainer">
+
+            <!-- TAB 1: WORDS VIEW -->
+            <div id="wordsView" class="space-y-4">
+                <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 px-1">
+                    <span>روی دکمه بلندگو بزنید تا تلفظ صحیح را بشنوید:</span>
+                    <span id="wordsCountBadge" class="font-bold text-brand-600">۰ کلمه</span>
+                </div>
+                <div id="wordsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <!-- Cards via JS -->
+                </div>
+            </div>
+
+            <!-- TAB: PAGE 6 CONVERSATION (EXACT TEXTBOOK VIEW) -->
+            <div id="page6View" class="hidden space-y-4">
+                <div class="bg-white dark:bg-slate-800 rounded-3xl p-5 sm:p-7 border border-slate-200 dark:border-slate-700 shadow-sm space-y-5">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-700">
+                        <div>
+                            <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400">کتاب درسی پایه هفتم • صفحه ۶</span>
+                            <h3 class="text-lg font-black text-slate-900 dark:text-white">مکالمه شروع کلاس (Conversation: Page 6)</h3>
+                        </div>
+                        <button id="page6PlayAllBtn" onclick="playFullStory('page6')" class="px-4 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md transition self-start sm:self-auto">
+                            <i class="fa-solid fa-play"></i>
+                            <span id="page6PlayAllText">پخش کامل مکالمه با صداهای جدا</span>
+                        </button>
+                    </div>
+
+                    <div id="page6LinesList" class="space-y-3">
+                        <!-- Populated via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: PAGE 8 SOUNDS & LETTERS (EXACT TEXTBOOK VIEW) -->
+            <div id="page8View" class="hidden space-y-4">
+                <div class="bg-white dark:bg-slate-800 rounded-3xl p-5 sm:p-7 border border-slate-200 dark:border-slate-700 shadow-sm space-y-5">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-700">
+                        <div>
+                            <span class="text-xs font-bold text-rose-600 dark:text-rose-400">کتاب درسی پایه هفتم • صفحه ۸</span>
+                            <h3 class="text-lg font-black text-slate-900 dark:text-white">صداها، حروف و هجی فامیلی (Sounds & Letters: Page 8)</h3>
+                        </div>
+                        <button id="page8PlayAllBtn" onclick="playFullStory('page8')" class="px-4 py-2.5 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md transition self-start sm:self-auto">
+                            <i class="fa-solid fa-play"></i>
+                            <span id="page8PlayAllText">پخش پیوسته بخش صفحه ۸</span>
+                        </button>
+                    </div>
+
+                    <div id="page8LinesList" class="space-y-3">
+                        <!-- Populated via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: MULTI-VOICE CONVERSATION VIEW (FACING / CHAT STYLE) -->
+            <div id="dialogueView" class="hidden space-y-6">
+                <div class="bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-900 rounded-2xl p-3.5 text-xs text-indigo-800 dark:text-indigo-300 flex items-center gap-3">
+                    <i class="fa-solid fa-circle-info text-base text-indigo-600 flex-shrink-0"></i>
+                    <span>مکالمات روبه‌رو: سلام دوستانه و رسمی، پرسیدن نام، نام کوچک (First name) و نام خانوادگی (Last name). هر دو طرف صدای اختصاصی دارند.</span>
+                </div>
+                <div id="dialoguesList" class="space-y-8">
+                    <!-- Conversations generated via JS -->
+                </div>
+            </div>
+
+            <!-- TAB 3: KEY SENTENCES VIEW -->
+            <div id="sentencesView" class="hidden space-y-3">
+                <div class="text-xs text-slate-500 dark:text-slate-400 px-1">
+                    روی هر جمله کلیک کنید تا با صدای واضح و شفاف تلفظ شود:
+                </div>
+                <div id="sentencesList" class="space-y-3">
+                    <!-- Sentences generated via JS -->
+                </div>
+            </div>
+
+            <!-- TAB 4: LESSON 1 MINI-GAME (SPELLING REMOVED - PURE LISTENING & MEANING) -->
+            <div id="minigameView" class="hidden space-y-6">
+                <div class="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-3xl p-5 sm:p-7 text-white shadow-xl space-y-5">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-3xl">🎯</span>
+                            <div>
+                                <h3 class="font-black text-lg sm:text-xl">بازی شنیداری و واژگان درس</h3>
+                                <p class="text-xs text-emerald-100">به تلفظ‌ها گوش بده و معنی یا کلمه درست رو سریع انتخاب کن!</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs bg-white/20 px-3 py-1 rounded-full font-bold">امتیاز: <span id="gameScoreSpan">۰</span></span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/20 space-y-4 text-center">
+                        <div class="flex flex-col items-center justify-center gap-2">
+                            <span class="text-xs font-semibold text-emerald-200" id="lessonGamePrompt">به صدای کلمه گوش بده و انتخاب کن:</span>
+                            <button onclick="playLessonGameAudio()" class="w-14 h-14 rounded-2xl bg-white text-emerald-600 hover:scale-105 active:scale-95 flex items-center justify-center text-2xl shadow-lg transition">
+                                <i class="fa-solid fa-volume-high"></i>
+                            </button>
+                            <div id="lessonGameDisplayWord" class="text-xl font-black text-white mt-1">First name</div>
+                        </div>
+
+                        <div id="lessonGameOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                            <!-- Options injected by JS -->
+                        </div>
+                    </div>
+                    <div id="lessonGameFeedback" class="text-center font-black text-sm min-h-[24px]"></div>
+                </div>
+            </div>
+
+            <!-- TAB 5: 20-QUESTION EXAM VIEW -->
+            <div id="examView" class="hidden space-y-4">
+                <!-- Exam Intro Screen -->
+                <div id="examIntroCard" class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 text-center border border-slate-200 dark:border-slate-700 shadow-sm max-w-xl mx-auto space-y-4">
+                    <div class="w-20 h-20 mx-auto rounded-3xl bg-amber-100 dark:bg-amber-950/60 text-amber-500 flex items-center justify-center text-4xl shadow-inner">
+                        <i class="fa-solid fa-file-signature"></i>
+                    </div>
+                    <h3 class="text-xl font-black text-slate-900 dark:text-white" id="examTargetTitle">آزمون استاندارد ۲۰ سوالی</h3>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                        این آزمون جامع شامل <strong>۲۰ سوال</strong> استاندارد (واژگان، شنیداری و مکالمه‌ای) است. هر سوال ۱ نمره دارد و نمره پایانی دقیقاً از ۲۰ محاسبه می‌شود.
+                    </p>
+                    <div class="pt-2">
+                        <button onclick="startExam()" class="px-8 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-black text-base shadow-lg shadow-amber-500/30 transition transform active:scale-95">
+                            <i class="fa-solid fa-play ml-2"></i> شروع آزمون ۲۰ سوالی (نمره از ۲۰)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Active Exam Screen -->
+                <div id="examActiveCard" class="hidden bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 shadow-md max-w-xl mx-auto space-y-5">
+                    <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-700 pb-3">
+                        <span id="examProgressText" class="text-xs font-black text-brand-600 dark:text-brand-400">سوال ۱ از ۲۰</span>
+                        <span class="text-xs font-extrabold px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400">ارزش: ۱ نمره</span>
+                    </div>
+                    <div id="examQuestionBody" class="space-y-4">
+                        <!-- Injected via JS -->
+                    </div>
+                    <div id="examOptionsGrid" class="grid grid-cols-1 gap-2.5 pt-2">
+                        <!-- Options buttons injected via JS -->
+                    </div>
+                </div>
+
+                <!-- Exam Result Screen -->
+                <div id="examResultCard" class="hidden bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700 shadow-lg max-w-xl mx-auto text-center space-y-4">
+                    <div id="examResultBadgeIcon" class="w-24 h-24 mx-auto rounded-3xl flex items-center justify-center text-5xl shadow-md">
+                        <!-- Injected -->
+                    </div>
+                    <h3 id="examScoreHeader" class="text-2xl font-black text-slate-900 dark:text-white"></h3>
+                    <p id="examFeedbackText" class="text-sm font-semibold text-slate-600 dark:text-slate-300"></p>
+                    
+                    <div class="grid grid-cols-3 gap-2 py-3 text-center">
+                        <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
+                            <div class="text-xs text-slate-400 mb-0.5">درست</div>
+                            <div id="examCorrectCount" class="text-lg font-black text-emerald-500">۰</div>
+                        </div>
+                        <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
+                            <div class="text-xs text-slate-400 mb-0.5">نادرست</div>
+                            <div id="examWrongCount" class="text-lg font-black text-rose-500">۰</div>
+                        </div>
+                        <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800">
+                            <div class="text-xs text-slate-400 mb-0.5">نمره نهایی</div>
+                            <div id="examFinalGrade" class="text-xl font-black text-brand-600">۰ / ۲۰</div>
+                        </div>
+                    </div>
+
+                    <button onclick="startExam()" class="w-full py-3 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-800 dark:text-white font-bold text-sm transition">
+                        <i class="fa-solid fa-rotate-right ml-2"></i> شرکت دوباره در آزمون ۲۰ سوالی
+                    </button>
+                </div>
+            </div>
+
+            <!-- SPECIAL VIEW: NUMBERS SECTION -->
+            <div id="numbersView" class="hidden space-y-6">
+                <!-- Numbers Fun Interactive Challenge -->
+                <div class="bg-gradient-to-r from-violet-600 to-indigo-600 rounded-3xl p-5 sm:p-6 text-white shadow-lg space-y-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl">🎲</span>
+                            <h3 class="font-black text-lg">بازی و چالش شنیداری اعداد انگلیسی</h3>
+                        </div>
+                        <span class="text-xs bg-white/20 px-3 py-1 rounded-full font-bold">تقویت لیسنینگ</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-indigo-100 leading-relaxed">
+                        به صدای عدد گوش کن یا کلمه رو بخون و بگو این چه عددیه!
+                    </p>
+                    <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <button onclick="playNumberGameVoice()" class="w-12 h-12 rounded-2xl bg-white text-indigo-600 flex items-center justify-center text-xl shadow-md hover:scale-105 active:scale-95 transition">
+                                <i class="fa-solid fa-volume-high"></i>
+                            </button>
+                            <div>
+                                <div id="gameNumberWord" class="text-xl font-black tracking-wide text-white">twenty-five</div>
+                                <div id="gameNumberPersian" class="text-xs text-indigo-200">تلفظ: «توئِنتی فایو»</div>
+                            </div>
+                        </div>
+                        <div id="numberGameOptions" class="grid grid-cols-4 gap-2 w-full sm:w-auto">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+                    <div id="gameFeedback" class="text-center font-bold text-sm min-h-[24px]"></div>
+                </div>
+
+                <!-- Teen vs Ty Critical Guide -->
+                <div class="bg-white dark:bg-slate-800 rounded-3xl p-5 sm:p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-xl bg-rose-100 dark:bg-rose-950 text-rose-500 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <h4 class="font-black text-base text-slate-900 dark:text-white">راز مهم نمره امتحان: تفاوت حساس «teen» و «ty»</h4>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                        اکثر دانش‌آموزان هفتم اعداد ۱۳ تا ۱۹ (تین) را با ۳۰ تا ۹۰ (تی) اشتباه می‌گیرند. روی بلندگوها بزنید و تفاوت استرس صدا را حس کنید:
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                        <div class="p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 flex items-center justify-between">
+                            <div>
+                                <div class="font-extrabold text-amber-700 dark:text-amber-300 text-sm">14 : Fourteen (چهارده)</div>
+                                <div class="text-[11px] text-amber-600 dark:text-amber-400">تلفظ فارسی: «فور-تین» (تکیه روی آخر)</div>
+                            </div>
+                            <button onclick="speakDirect('fourteen')" class="w-9 h-9 rounded-xl bg-amber-500 hover:bg-amber-600 text-white flex items-center justify-center shadow-sm">
+                                <i class="fa-solid fa-volume-high"></i>
+                            </button>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50 flex items-center justify-between">
+                            <div>
+                                <div class="font-extrabold text-blue-700 dark:text-blue-300 text-sm">40 : Forty (چهل)</div>
+                                <div class="text-[11px] text-blue-600 dark:text-blue-400">تلفظ فارسی: «فور-تی» (تکیه روی اول، کوتاه)</div>
+                            </div>
+                            <button onclick="speakDirect('forty')" class="w-9 h-9 rounded-xl bg-blue-500 hover:bg-blue-600 text-white flex items-center justify-center shadow-sm">
+                                <i class="fa-solid fa-volume-high"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Complete Numbers Grid -->
+                <div class="space-y-3">
+                    <h4 class="font-black text-sm text-slate-700 dark:text-slate-300">لیست تمام اعداد کتاب هفتم (با تلفظ و هجی):</h4>
+                    <div id="fullNumbersGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- COMING SOON VIEW FOR LESSONS 2-8 -->
+            <div id="comingSoonView" class="hidden bg-white dark:bg-slate-800 rounded-3xl p-8 sm:p-12 text-center border border-slate-200 dark:border-slate-700 shadow-sm max-w-lg mx-auto space-y-4">
+                <div class="w-20 h-20 mx-auto rounded-3xl bg-brand-50 dark:bg-brand-950/50 text-brand-600 dark:text-brand-400 flex items-center justify-center text-4xl">
+                    <i class="fa-solid fa-clock-rotate-left"></i>
+                </div>
+                <h3 id="comingSoonTitle" class="text-xl font-black text-slate-900 dark:text-white">به زودی...</h3>
+                <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                    محتوای این درس مطابق دستور شما در حال آماده‌سازی و بازبینی دقیق است تا با بالاترین کیفیت در اختیارتان قرار گیرد. فعلاً روی بخش مقدماتی و درس اول تمرکز داریم!
+                </p>
+                <button onclick="selectLesson('lesson1')" class="px-5 py-2.5 rounded-xl bg-brand-600 text-white font-bold text-xs shadow-md hover:bg-brand-700 transition">
+                    بازگشت به درس اول
+                </button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-4 text-center text-xs text-slate-400">
+        دستیار آموزش زبان هفتم • کاملاً آفلاین و استاندارد کتاب Prospect 1
+    </footer>
+
+    <!-- JAVASCRIPT APPLICATION LOGIC -->
+    <script>
+        /* =========================================================================
+           1. DATA REPOSITORY (EXACT TEXTBOOK PAGES 6 & 8 + FACING DIALOGUES)
+           ========================================================================= */
+        const APP_DATA = {
+            welcome: {
+                id: 'welcome',
+                badge: 'بخش مقدماتی',
+                title: 'Welcome to English (خوش‌آمدید)',
+                words: [
+                    { en: 'English', fa: 'انگلیسی', pr: 'اینگلیش', note: 'نام درس و زبان' },
+                    { en: 'Book', fa: 'کتاب', pr: 'بوک', note: 'شیء کلاسی' },
+                    { en: 'Student', fa: 'دانش‌آموز', pr: 'استیودِنت', note: 'نقش در مدرسه' },
+                    { en: 'Teacher', fa: 'معلم / آموزگار', pr: 'تیچِر', note: 'راهنمای کلاس' },
+                    { en: 'Class', fa: 'کلاس درس', pr: 'کلاس', note: 'مکان' },
+                    { en: 'Classmate', fa: 'هم‌کلاسی', pr: 'کلاس‌مِیت', note: 'دوست هم‌کلاس' },
+                    { en: 'School', fa: 'مدرسه', pr: 'اسکول', note: 'محیط آموزشی' },
+                    { en: 'Welcome', fa: 'خوش آمدید', pr: 'وِلکام', note: 'تبریک و خوش‌آمد' },
+                    { en: 'Hello', fa: 'سلام', pr: 'هِلُو', note: 'احوالپرسی عمومی' },
+                    { en: 'Hi', fa: 'سلام (صمیمانه)', pr: 'های', note: 'احوالپرسی خودمانی' },
+                    { en: 'Good morning', fa: 'صبح بخیر', pr: 'گود مورنینگ', note: 'احوالپرسی صبح' },
+                    { en: 'Good afternoon', fa: 'بعدازظهر بخیر', pr: 'گود اَفترنون', note: 'احوالپرسی بعدازظهر' },
+                    { en: 'Good evening', fa: 'عصر بخیر', pr: 'گود ایوْنینگ', note: 'احوالپرسی غروب' },
+                    { en: 'Goodbye', fa: 'خداحافظ', pr: 'گود بای', note: 'خداحافظی' },
+                    { en: 'Bye', fa: 'خداحافظ (کوتاه)', pr: 'بای', note: 'خداحافظی دوستانه' },
+                    { en: 'Listen', fa: 'گوش کنید', pr: 'لیسِن', note: 'دستور کلاسی' },
+                    { en: 'Look', fa: 'نگاه کنید', pr: 'لوک', note: 'دستور کلاسی' },
+                    { en: 'Read', fa: 'بخوانید', pr: 'رید', note: 'دستور کلاسی' },
+                    { en: 'Write', fa: 'بنویسید', pr: 'رایت', note: 'دستور کلاسی' },
+                    { en: 'Speak', fa: 'صحبت کنید', pr: 'اسپیک', note: 'دستور کلاسی' },
+                    { en: 'Repeat', fa: 'تکرار کنید', pr: 'ریپیت', note: 'دستور کلاسی' },
+                    { en: 'Open', fa: 'باز کنید', pr: 'اُپِن', note: 'دستور کلاسی' },
+                    { en: 'Close', fa: 'ببندید', pr: 'کلوز', note: 'دستور کلاسی' },
+                    { en: 'Sit down', fa: 'بنشینید', pr: 'سیت داون', note: 'دستور کلاسی' },
+                    { en: 'Stand up', fa: 'بلند شوید / بایستید', pr: 'اِستَند آپ', note: 'دستور کلاسی' },
+                    { en: 'Please', fa: 'لطفاً', pr: 'پلیز', note: 'ادب و احترام' },
+                    { en: 'Thank you', fa: 'متشکرم', pr: 'تَنک یو', note: 'تشکر' },
+                    { en: 'Thanks', fa: 'ممنون', pr: 'تَنکس', note: 'تشکر دوستانه' },
+                    { en: 'Alphabet', fa: 'الفبا', pr: 'آلفابِت', note: 'حروف انگلیسی' }
+                ],
+                dialoguePairs: [
+                    {
+                        title: 'مکالمه کلاسی: ورود معلم و دانش‌آموزان',
+                        pairs: [
+                            {
+                                left: { role: 'teacher_male', sender: 'معلم (Mr. Brown)', text: 'Hello, class! Good morning.', pr: 'هلو، کلاس! گود مورنینگ.', fa: 'سلام کلاس! صبح بخیر.' },
+                                right: { role: 'students', sender: 'دانش‌آموزان', text: 'Good morning, Teacher!', pr: 'گود مورنینگ، تیچِر!', fa: 'صبح بخیر آقا معلم!' }
+                            },
+                            {
+                                left: { role: 'teacher_male', sender: 'معلم (Mr. Brown)', text: 'Please sit down and open your books.', pr: 'پلیز سیت داون اَند اُپن یور بوکس.', fa: 'لطفاً بنشینید و کتاب‌هایتان را باز کنید.' },
+                                right: { role: 'students', sender: 'دانش‌آموزان', text: 'Yes, Teacher. Thank you.', pr: 'یِس، تیچر. تنک یو.', fa: 'چشم آقا معلم، متشکریم.' }
+                            }
+                        ]
+                    }
+                ],
+                sentences: [
+                    { en: 'Welcome to English class.', fa: 'به کلاس زبان انگلیسی خوش آمدید.', pr: 'ولکام تو اینگلیش کلاس.' },
+                    { en: 'Please listen carefully.', fa: 'لطفاً با دقت گوش دهید.', pr: 'پلیز لیسن کرفولی.' },
+                    { en: 'Open your English book.', fa: 'کتاب انگلیسی‌تان را باز کنید.', pr: 'اپن یور اینگلیش بوک.' },
+                    { en: 'Stand up, please.', fa: 'لطفاً بایستید / بلند شوید.', pr: 'استند آپ پلیز.' },
+                    { en: 'Sit down, please.', fa: 'لطفاً بنشینید.', pr: 'سیت داون پلیز.' },
+                    { en: 'Thank you very much.', fa: 'بسیار متشکرم.', pr: 'تنک یو وِری ماچ.' }
+                ],
+                conversationQuestions: [
+                    { q: "Teacher: Good morning, class!\nStudents: ________", correct: "Good morning, Teacher!", options: ["Good morning, Teacher!", "Goodbye!", "Stand up, please.", "Close your books."] },
+                    { q: "Teacher: Please sit down.\nStudent: ________", correct: "Thank you.", options: ["Thank you.", "Open your book.", "What's your name?", "I am ten."] }
+                ]
+            },
+            lesson1: {
+                id: 'lesson1',
+                badge: 'درس اول • My Name',
+                title: 'Lesson 1: My Name (نام من)',
+                words: [
+                    { en: 'Name', fa: 'نام / اسم', pr: 'نِیم', note: 'واژه کلیدی درس ۱' },
+                    { en: 'First name', fa: 'نام کوچک', pr: 'فِرست نِیم', note: 'اسم شخص (مثل Tom)' },
+                    { en: 'Last name', fa: 'نام خانوادگی / فامیلی', pr: 'لَست نِیم', note: 'فامیلی شخص (مثل Miller)' },
+                    { en: 'What', fa: 'چه / چیست', pr: 'وات', note: 'کلمه پرسشی' },
+                    { en: "What's", fa: 'چیست (مخفف What is)', pr: 'واتس', note: 'فرم گفتاری' },
+                    { en: 'My', fa: 'مال من (ضمیر ملکی)', pr: 'مای', note: 'مثل my name' },
+                    { en: 'Your', fa: 'مال شما / مال تو', pr: 'یور', note: 'مثل your name' },
+                    { en: 'How', fa: 'چگونه / چطور', pr: 'هاو', note: 'در احوالپرسی و هجی' },
+                    { en: 'You', fa: 'تو / شما', pr: 'یو', note: 'ضمیر مخاطب' },
+                    { en: 'Are', fa: 'هستید (فعل to be)', pr: 'آر', note: 'برای you' },
+                    { en: 'Fine', fa: 'خوب / سلامت', pr: 'فاین', note: 'پاسخ احوالپرسی' },
+                    { en: 'Great', fa: 'عالی / فوق‌العاده', pr: 'گْرِیت', note: 'پاسخ احوالپرسی پرانرژی' },
+                    { en: 'Thanks', fa: 'ممنون / متشکرم', pr: 'تَنکس', note: 'تشکر کوتاه' },
+                    { en: 'Thank you', fa: 'متشکرم', pr: 'تَنک یو', note: 'تشکر محترمانه' },
+                    { en: 'Spell', fa: 'هجی کردن / حرف‌به‌حرف گفتن', pr: 'اِسپِل', note: 'Sounds & Letters' },
+                    { en: 'Mr.', fa: 'آقای (مخفف Mister)', pr: 'میستِر', note: 'برای نام خانوادگی آقایان' },
+                    { en: 'Mrs.', fa: 'خانم متأهل (Mistress)', pr: 'میسیز', note: 'برای بانوان متأهل' },
+                    { en: 'Miss', fa: 'دوشیزه / خانم مجرد', pr: 'میس', note: 'برای دختران و بانوان مجرد' },
+                    { en: 'Excuse me', fa: 'ببخشید / عذر می‌خواهم', pr: 'اِکسکیوز می', note: 'صفحه ۸ کتاب' },
+                    { en: 'One by one', fa: 'یکی‌یکی / نوبتی', pr: 'وان بای وان', note: 'صفحه ۸ کتاب' },
+                    { en: 'Say', fa: 'گفتن / بگو', pr: 'سِی', note: 'صفحه ۸ کتاب' },
+                    { en: 'Today', fa: 'امروز', pr: 'تودِی', note: 'قید زمان در احوالپرسی' },
+                    { en: 'Good morning', fa: 'صبح بخیر', pr: 'گود مورنینگ', note: 'سلام رسمی صبح' },
+                    { en: 'Good afternoon', fa: 'بعدازظهر بخیر', pr: 'گود اَفترنون', note: 'سلام رسمی بعدازظهر' },
+                    { en: 'Hello', fa: 'سلام', pr: 'هِلُو', note: 'سلام رسمی و عمومی' },
+                    { en: 'Hi', fa: 'سلام', pr: 'های', note: 'سلام دوستانه' },
+                    { en: 'Introduce', fa: 'معرفی کردن', pr: 'اینترودیوس', note: 'Function درس ۱' },
+                    { en: 'Greet', fa: 'احوالپرسی کردن', pr: 'گریت', note: 'Function درس ۱' },
+                    { en: 'Again', fa: 'دوباره / مجدداً', pr: 'اِگِین', note: 'در تمرینات کتاب' },
+                    { en: 'Sit down', fa: 'بنشینید', pr: 'سیت داون', note: 'دستور معلم در صفحه ۶' },
+                    { en: 'Please', fa: 'لطفاً', pr: 'پلیز', note: 'عبارت احترامی' }
+                ],
+                // Page 6 Exact Textbook Conversation (Adapted to simple English names)
+                page6Conversation: [
+                    { role: 'teacher_male', speaker: 'Teacher (Mr. Brown)', text: 'Hi, class!', pr: 'های، کلاس!', fa: 'سلام، کلاس!' },
+                    { role: 'students', speaker: 'Students (دانش‌آموزان)', text: 'Hello, Teacher.', pr: 'هلو، تیچِر.', fa: 'سلام، آقا معلم.' },
+                    { role: 'teacher_male', speaker: 'Teacher', text: 'Thank you, sit down, please.', pr: 'تَنک یو، سیت داون، پلیز.', fa: 'متشکرم، لطفاً بنشینید.' },
+                    { role: 'teacher_male', speaker: 'Teacher', text: "I'm your English teacher. My name is David Brown.", pr: 'آی اَم یور اینگلیش تیچر. مای نِیم ایز دِیوید براون.', fa: 'من معلم انگلیسی شما هستم. نام من دِیوید براون است.' },
+                    { role: 'teacher_male', speaker: 'Teacher', text: "Now, you tell me your names. What's your name?", pr: 'ناو، یو تِل می یور نِیمز. واتس یور نِیم؟', fa: 'حالا، شما نام‌هایتان را به من بگویید. نام تو چیست؟' },
+                    { role: 'student_boy', speaker: 'Student 1 (Tom Miller)', text: 'My name is Tom Miller.', pr: 'مای نِیم ایز تام میلِر.', fa: 'نام من تام میلِر است.' },
+                    { role: 'teacher_male', speaker: 'Teacher', text: 'How are you, Tom?', pr: 'هاو آر یو، تام؟', fa: 'حالت چطور است، تام؟' },
+                    { role: 'student_boy', speaker: 'Student 1 (Tom)', text: 'Fine, thank you.', pr: 'فاین، تَنک یو.', fa: 'خوبم، متشکرم.' },
+                    { role: 'teacher_male', speaker: 'Teacher', text: "And what's your name?", pr: 'اَند واتس یور نِیم؟', fa: 'و نام تو چیست؟' },
+                    { role: 'student_boy2', speaker: 'Student 2 (Ben)', text: 'My name is Ben.', pr: 'مای نِیم ایز بِن.', fa: 'نام من بِن است.' }
+                ],
+                // Page 8 Exact Sounds & Letters (Adapted to simple English names)
+                page8Sounds: [
+                    { role: 'teacher_female', speaker: 'Teacher (Mrs. Green)', text: 'Hi, class! I am Mrs. Green, your English teacher.', pr: 'های، کلاس! آی اَم میسیز گرین، یور اینگلیش تیچِر.', fa: 'سلام کلاس! من خانم گرین هستم، معلم انگلیسی شما.' },
+                    { role: 'students', speaker: 'Class (کلاس)', text: 'Hello, Mrs. Green.', pr: 'هلو، میسیز گرین.', fa: 'سلام، خانم گرین.' },
+                    { role: 'teacher_female', speaker: 'Teacher', text: "Now you say your names one by one. You, please. What's your name?", pr: 'ناو یو سِی یور نِیمز وان بای وان. یو، پلیز. واتس یور نِیم؟', fa: 'حالا نام‌هایتان را یکی‌یکی بگویید. شما، لطفاً. نام شما چیست؟' },
+                    { role: 'student_girl', speaker: 'Emma (اِما)', text: "I'm Emma Adams.", pr: 'آی اَم اِما آدامز.', fa: 'من اِما آدامز هستم.' },
+                    { role: 'teacher_female', speaker: 'Teacher', text: 'Excuse me. How do you spell your last name?', pr: 'اِکسکیوز می. هاو دو یو اِسپِل یور لَست نِیم؟', fa: 'ببخشید. نام خانوادگی‌ات را چگونه هجی می‌کنی؟' },
+                    { role: 'student_girl', speaker: 'Emma (اِما)', text: 'Adams, A - D - A - M - S.', pr: 'آدامز، اِی - دی - اِی - اِم - اِس.', fa: 'آدامز، A - D - A - M - S' },
+                    { role: 'teacher_female', speaker: 'Teacher', text: 'Thank you, Emma. Now, you please say your name.', pr: 'تَنک یو، اِما. ناو، یو پلیز سِی یور نِیم.', fa: 'متشکرم اِما. حالا، شما لطفاً نام خود را بگویید.' },
+                    { role: 'student_boy', speaker: 'Student (Tom)', text: 'My name is Tom.', pr: 'مای نِیم ایز تام.', fa: 'نام من تام است.' }
+                ],
+                // Practice 1 & 2 (Greeting: Informal & Formal, Asking Names)
+                dialoguePairs: [
+                    {
+                        title: 'تمرین ۱: سلام و احوال‌پرسی دوستانه (Informal Greeting)',
+                        pairs: [
+                            {
+                                left: { role: 'student_boy', sender: 'Tom (تام)', text: 'Hi, Ben. How are you today?', pr: 'های، بِن. هاو آر یو تودِی؟', fa: 'سلام، بِن. امروز چطوری؟' },
+                                right: { role: 'student_boy2', sender: 'Ben (بِن)', text: 'Great, thanks. How are you?', pr: 'گْرِیت، تَنکس. هاو آر یو؟', fa: 'عالی، ممنون. تو چطوری؟' }
+                            },
+                            {
+                                left: { role: 'student_boy', sender: 'Tom (تام)', text: 'Fine, thank you.', pr: 'فاین، تَنک یو.', fa: 'خوبم، متشکرم.' },
+                                right: { role: 'student_boy2', sender: 'Ben (بِن)', text: 'Good to see you!', pr: 'گود تو سی یو!', fa: 'خوشحالم می‌بینمت!' }
+                            }
+                        ]
+                    },
+                    {
+                        title: 'تمرین ۲: سلام و احوال‌پرسی رسمی با معلم (Formal Greeting)',
+                        pairs: [
+                            {
+                                left: { role: 'student_boy', sender: 'Tom (تام)', text: 'Good morning, Mr. Brown.', pr: 'گود مورنینگ، میستِر براون.', fa: 'صبح بخیر، آقای براون.' },
+                                right: { role: 'teacher_male', sender: 'Mr. Brown (معلم)', text: 'Good morning, Tom. How are you?', pr: 'گود مورنینگ، تام. هاو آر یو؟', fa: 'صبح بخیر، تام. حالت چطور است؟' }
+                            },
+                            {
+                                left: { role: 'student_boy', sender: 'Tom (تام)', text: 'I am fine, thank you, sir.', pr: 'آی اَم فاین، تَنک یو، سِر.', fa: 'من خوبم، متشکرم آقا.' },
+                                right: { role: 'teacher_male', sender: 'Mr. Brown (معلم)', text: 'Very good. Please sit down.', pr: 'وِری گود. پلیز سیت داون.', fa: 'بسیار خوب. لطفاً بنشین.' }
+                            }
+                        ]
+                    },
+                    {
+                        title: 'تمرین ۳: پرسیدن نام کوچک و نام خانوادگی (First Name & Last Name)',
+                        pairs: [
+                            {
+                                left: { role: 'teacher_male', sender: 'Mr. Brown', text: "What is your first name?", pr: 'وات ایز یور فِرست نِیم؟', fa: 'نام کوچک شما چیست؟' },
+                                right: { role: 'student_boy', sender: 'Tom (تام)', text: "My first name is Tom.", pr: 'مای فِرست نِیم ایز تام.', fa: 'نام کوچک من تام است.' }
+                            },
+                            {
+                                left: { role: 'teacher_male', sender: 'Mr. Brown', text: "And what's your last name?", pr: 'اَند واتس یور لَست نِیم؟', fa: 'و نام خانوادگی شما چیست؟' },
+                                right: { role: 'student_boy', sender: 'Tom (تام)', text: "My last name is Miller.", pr: 'مای لَست نِیم ایز میلِر.', fa: 'نام خانوادگی من میلِر است.' }
+                            }
+                        ]
+                    },
+                    {
+                        title: 'تمرین ۴: معرفی و آشنایی دو هم‌کلاسی (Introducing)',
+                        pairs: [
+                            {
+                                left: { role: 'student_boy', sender: 'Tom (تام)', text: "Hello, my name is Tom.", pr: 'هلو، مای نِیم ایز تام.', fa: 'سلام، اسم من تام است.' },
+                                right: { role: 'student_boy2', sender: 'Ben (بِن)', text: "Hi, I am Ben. Nice to meet you.", pr: 'های، آی اَم بِن. نایس تو میت یو.', fa: 'سلام، من بِن هستم. از دیدنت خوشوقتم.' }
+                            },
+                            {
+                                left: { role: 'student_boy', sender: 'Tom (تام)', text: "Nice to meet you, too.", pr: 'نایس تو میت یو، تو.', fa: 'من هم از دیدن شما خوشوقتم.' },
+                                right: { role: 'student_boy2', sender: 'Ben (بِن)', text: "Welcome to our class!", pr: 'وِلکام تو آور کلاس!', fa: 'به کلاس ما خوش آمدی!' }
+                            }
+                        ]
+                    }
+                ],
+                sentences: [
+                    { en: "What's your name?", fa: "نام شما چیست؟", pr: "واتس یور نِیم؟" },
+                    { en: "My name is Tom.", fa: "نام من تام است.", pr: "مای نِیم ایز تام." },
+                    { en: "I am Tom Miller.", fa: "من تام میلِر هستم.", pr: "آی اَم تام میلِر." },
+                    { en: "What's your first name?", fa: "نام کوچک شما چیست؟", pr: "واتس یور فِرست نِیم؟" },
+                    { en: "My first name is Tom.", fa: "نام کوچک من تام است.", pr: "مای فِرست نِیم ایز تام." },
+                    { en: "What's your last name?", fa: "نام خانوادگی شما چیست؟", pr: "واتس یور لَست نِیم؟" },
+                    { en: "My last name is Miller.", fa: "نام خانوادگی من میلِر است.", pr: "مای لَست نِیم ایز میلِر." },
+                    { en: "How do you spell your last name?", fa: "نام خانوادگی‌ات را چطور هجی می‌کنی؟", pr: "هاو دو یو اِسپِل یور لَست نِیم؟" },
+                    { en: "How are you today?", fa: "امروز چطورید؟", pr: "هاو آر یو تودِی؟" },
+                    { en: "Fine, thanks.", fa: "خوبم، ممنون.", pr: "فاین، تَنکس." },
+                    { en: "Great, thanks.", fa: "عالی، ممنون.", pr: "گْرِیت، تَنکس." },
+                    { en: "Hello, Mr. Brown.", fa: "سلام آقای براون.", pr: "هلو، میستِر براون." },
+                    { en: "Good morning, class.", fa: "صبح بخیر کلاس.", pr: "گود مورنینگ، کلاس." },
+                    { en: "Good afternoon.", fa: "بعدازظهر بخیر.", pr: "گود اَفترنون." },
+                    { en: "I'm your English teacher.", fa: "من معلم زبان انگلیسی شما هستم.", pr: "آی اَم یور اینگلیش تیچِر." }
+                ],
+                conversationQuestions: [
+                    { q: "Tom: Nice to meet you, Ben!\nBen: ________", correct: "Nice to meet you, too.", options: ["Nice to meet you, too.", "My name is Tom.", "Good morning, Teacher.", "Close your book."] },
+                    { q: "Teacher: How are you today, Tom?\nTom: ________", correct: "Great, thanks.", options: ["Great, thanks.", "M - I - L - L - E - R", "My last name is Brown.", "Sit down, please."] },
+                    { q: "Teacher: What's your first name?\nStudent: ________", correct: "My first name is Tom.", options: ["My first name is Tom.", "My last name is Miller.", "Nice to meet you.", "I am twelve."] },
+                    { q: "Teacher: How do you spell your last name?\nEmma: ________", correct: "A - D - A - M - S.", options: ["A - D - A - M - S.", "I am fine.", "My name is Tom.", "Yes, please."] }
+                ]
+            }
+        };
+
+        const NUMBERS_DATA = [
+            { num: 0, en: 'zero', fa: 'صفر', pr: 'زیرو' },
+            { num: 1, en: 'one', fa: 'یک', pr: 'وان' },
+            { num: 2, en: 'two', fa: 'دو', pr: 'تو' },
+            { num: 3, en: 'three', fa: 'سه', pr: 'تری' },
+            { num: 4, en: 'four', fa: 'چهار', pr: 'فور' },
+            { num: 5, en: 'five', fa: 'پنج', pr: 'فایو' },
+            { num: 6, en: 'six', fa: 'شش', pr: 'سیکس' },
+            { num: 7, en: 'seven', fa: 'هفت', pr: 'سِوِن' },
+            { num: 8, en: 'eight', fa: 'هشت', pr: 'اِیت' },
+            { num: 9, en: 'nine', fa: 'نه', pr: 'ناین' },
+            { num: 10, en: 'ten', fa: 'ده', pr: 'تِن' },
+            { num: 11, en: 'eleven', fa: 'یازده', pr: 'ایلِوِن' },
+            { num: 12, en: 'twelve', fa: 'دوازده', pr: 'توئِلو' },
+            { num: 13, en: 'thirteen', fa: 'سیزده', pr: 'تِر-تین' },
+            { num: 14, en: 'fourteen', fa: 'چهارده', pr: 'فور-تین' },
+            { num: 15, en: 'fifteen', fa: 'پانزده', pr: 'فیف-تین' },
+            { num: 16, en: 'sixteen', fa: 'شانزده', pr: 'سیکس-تین' },
+            { num: 17, en: 'seventeen', fa: 'هفده', pr: 'سِوِن-تین' },
+            { num: 18, en: 'eighteen', fa: 'هجده', pr: 'اِی-تین' },
+            { num: 19, en: 'nineteen', fa: 'نوزده', pr: 'ناین-تین' },
+            { num: 20, en: 'twenty', fa: 'بیست', pr: 'توئِنتی' },
+            { num: 25, en: 'twenty-five', fa: 'بیست و پنج', pr: 'توئنتی فایو' },
+            { num: 30, en: 'thirty', fa: 'سی', pr: 'تِرتی' },
+            { num: 40, en: 'forty', fa: 'چهل', pr: 'فورتی' },
+            { num: 50, en: 'fifty', fa: 'پنجاه', pr: 'فیفتی' },
+            { num: 60, en: 'sixty', fa: 'شصت', pr: 'سیکستی' },
+            { num: 70, en: 'seventy', fa: 'هفتاد', pr: 'سِوِنتی' },
+            { num: 80, en: 'eighty', fa: 'هشتاد', pr: 'اِیتی' },
+            { num: 90, en: 'ninety', fa: 'نود', pr: 'ناینتی' },
+            { num: 100, en: 'one hundred', fa: 'صد', pr: 'وان هاندْرِد' }
+        ];
+
+        /* =========================================================================
+           2. GLOBAL STATE
+           ========================================================================= */
+        let currentLesson = 'lesson1';
+        let currentTab = 'words';
+        let speechRate = 0.95;
+        let activeSpeakerBtn = null;
+        let isStoryPlaying = false;
+
+        /* =========================================================================
+           3. SPEECH SYNTHESIS ENGINE (CLEAN GENDER MAPPING & CRISP VOICES)
+           ========================================================================= */
+        function getVoiceForRole(role, voices) {
+            if (!voices || voices.length === 0) return null;
+
+            const enVoices = voices.filter(v => v.lang.startsWith('en'));
+            const pool = enVoices.length > 0 ? enVoices : voices;
+
+            // صداهای زنانه باکیفیت و شفاف
+            const femaleVoices = pool.filter(v => 
+                /zira|samantha|karen|female|victoria|jenny|ava|allison|fiona|cora/i.test(v.name)
+            );
+            // صداهای مردانه واقعی
+            const maleVoices = pool.filter(v => 
+                /david|george|mark|guy|james|richard|daniel|oliver|brian|alex/i.test(v.name) && 
+                !/female|zira|samantha/i.test(v.name)
+            );
+
+            const defaultFemale = femaleVoices.length > 0 ? femaleVoices[0] : pool[0];
+            const defaultMale = maleVoices.length > 0 ? maleVoices[0] : pool[0];
+
+            if (role === 'teacher_male') {
+                // معلم آقا: الزاماً مردانه با لحن رسمی
+                return defaultMale;
+            } else if (role === 'teacher_female') {
+                // معلم خانم: صدای خانم رسا
+                return defaultFemale;
+            } else if (role === 'student_boy') {
+                // دانش‌آموز پسر ۱ (تام): صدای مردانه/پسرانه جوان
+                return maleVoices.find(v => /alex|daniel|tom|kid/i.test(v.name)) || defaultMale;
+            } else if (role === 'student_boy2') {
+                // دانش‌آموز پسر ۲ (بِن): صدای مردانه متفاوت
+                return maleVoices.find(v => /fred|oliver|brian|guy/i.test(v.name)) || maleVoices[1] || defaultMale;
+            } else if (role === 'student_girl') {
+                // دانش‌آموز دختر (اِما): صدای دخترانه لطیف
+                return femaleVoices.find(v => /eva|stephanie|aria|girl/i.test(v.name)) || femaleVoices[1] || defaultFemale;
+            } else if (role === 'vocab' || role === 'general') {
+                // بخش واژگان و جملات: صدای خانم خوش‌صدا و شمرده
+                return defaultFemale;
+            }
+            return pool[0];
+        }
+
+        function speakDirect(rawText, role = 'vocab', btn = null, onComplete = null) {
+            if (!('speechSynthesis' in window)) {
+                if (onComplete) onComplete();
+                return;
+            }
+
+            window.speechSynthesis.cancel();
+
+            if (btn) {
+                if (activeSpeakerBtn) activeSpeakerBtn.classList.remove('speaking-active');
+                activeSpeakerBtn = btn;
+                btn.classList.add('speaking-active');
+            }
+
+            const cleanText = rawText
+                .replace(/\bMr\.?\b/gi, 'Mister')
+                .replace(/\bMrs\.?\b/gi, 'Missis')
+                .replace(/\bMiss\b/gi, 'Miss');
+
+            const voices = window.speechSynthesis.getVoices();
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            utterance.lang = 'en-US';
+            utterance.rate = speechRate;
+            utterance.voice = getVoiceForRole(role, voices);
+
+            // تنظیم دقیق گام و حس صدا (بدون حالت بم و بوری، شفاف و زنده)
+            if (role === 'teacher_male') {
+                utterance.pitch = 0.98; // مردانه، باوقار و طبیعی
+            } else if (role === 'teacher_female') {
+                utterance.pitch = 1.05; // خانم، شیوا و رسا
+            } else if (role === 'student_boy') {
+                utterance.pitch = 1.30; // پسرانه نوجوان، شاداب و شفاف
+            } else if (role === 'student_boy2') {
+                utterance.pitch = 1.18; // پسر دوم، متمایز و روان
+            } else if (role === 'student_girl') {
+                utterance.pitch = 1.38; // دخترانه شاداب
+            } else if (role === 'students') {
+                utterance.pitch = 1.22; // کلاس
+            } else {
+                // واژگان و جملات: صدای خانم ملایم و واضح
+                utterance.pitch = 1.10;
+            }
+
+            utterance.onend = () => {
+                if (btn) {
+                    btn.classList.remove('speaking-active');
+                    activeSpeakerBtn = null;
+                }
+                if (onComplete) onComplete();
+            };
+
+            utterance.onerror = () => {
+                if (btn) {
+                    btn.classList.remove('speaking-active');
+                    activeSpeakerBtn = null;
+                }
+                if (onComplete) onComplete();
+            };
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function playFullStory(pageType) {
+            if (isStoryPlaying) {
+                window.speechSynthesis.cancel();
+                isStoryPlaying = false;
+                resetPlayAllButton(pageType);
+                return;
+            }
+
+            const data = APP_DATA[currentLesson];
+            if (!data) return;
+
+            const list = pageType === 'page6' ? data.page6Conversation : data.page8Sounds;
+            if (!list || list.length === 0) return;
+
+            isStoryPlaying = true;
+            updatePlayAllButton(pageType, true);
+
+            let idx = 0;
+            function playNext() {
+                if (!isStoryPlaying || idx >= list.length) {
+                    isStoryPlaying = false;
+                    resetPlayAllButton(pageType);
+                    return;
+                }
+
+                const item = list[idx];
+                const lineBtn = document.getElementById(`${pageType}-line-btn-${idx}`);
+                speakDirect(item.text, item.role, lineBtn, () => {
+                    idx++;
+                    setTimeout(playNext, 600);
+                });
+            }
+
+            playNext();
+        }
+
+        function updatePlayAllButton(pageType, playing) {
+            const btn = document.getElementById(`${pageType}PlayAllBtn`);
+            const text = document.getElementById(`${pageType}PlayAllText`);
+            if (btn && text) {
+                if (playing) {
+                    btn.classList.add('bg-rose-600', 'hover:bg-rose-700');
+                    btn.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+                    text.textContent = 'توقف پخش خودکار';
+                }
+            }
+        }
+
+        function resetPlayAllButton(pageType) {
+            const btn = document.getElementById(`${pageType}PlayAllBtn`);
+            const text = document.getElementById(`${pageType}PlayAllText`);
+            if (btn && text) {
+                btn.classList.remove('bg-rose-600', 'hover:bg-rose-700');
+                if (pageType === 'page6') {
+                    btn.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+                    text.textContent = 'پخش کامل مکالمه با صداهای جدا';
+                } else {
+                    btn.classList.add('bg-rose-600', 'hover:bg-rose-700');
+                    text.textContent = 'پخش پیوسته بخش صفحه ۸';
+                }
+            }
+        }
+
+        function speakInputText() {
+            const val = document.getElementById('searchInput').value.trim();
+            if (val) {
+                speakDirect(val);
+            }
+        }
+
+        function toggleSpeed() {
+            const btnText = document.getElementById('speedText');
+            const icon = document.getElementById('speedIcon');
+            
+            // چرخه سه حالته: عادی (0.95) -> تند (1.25) -> کند (0.65) -> عادی
+            if (speechRate === 0.95) {
+                speechRate = 1.25;
+                icon.textContent = '⚡';
+                btnText.textContent = 'سرعت: دور تُند';
+            } else if (speechRate === 1.25) {
+                speechRate = 0.65;
+                icon.textContent = '🐢';
+                btnText.textContent = 'سرعت: دور کُند';
+            } else {
+                speechRate = 0.95;
+                icon.textContent = '🐰';
+                btnText.textContent = 'سرعت: عادی';
+            }
+        }
+
+        /* =========================================================================
+           4. NAVIGATION & TABS
+           ========================================================================= */
+        function toggleMenu() {
+            const drawer = document.getElementById('drawer');
+            const overlay = document.getElementById('drawerOverlay');
+            const isOpen = !drawer.classList.contains('translate-x-full');
+
+            if (isOpen) {
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('opacity-0');
+                setTimeout(() => overlay.classList.add('hidden'), 300);
+            } else {
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+                drawer.classList.remove('translate-x-full');
+            }
+        }
+
+        function renderDrawerLinks() {
+            const container = document.getElementById('drawerLinks');
+            const items = [
+                { id: 'welcome', title: 'مقدمه: Welcome to English', icon: 'fa-hand-peace', ready: true },
+                { id: 'lesson1', title: 'درس ۱: My Name (نام من)', icon: 'fa-id-badge', ready: true },
+                { id: 'numbers', title: 'بخش ویژه اعداد ۰ تا ۱۰۰', icon: 'fa-arrow-down-1-9', ready: true },
+                { id: 'lesson2', title: 'درس ۲: My Age (سن من)', icon: 'fa-cake-candles', ready: false },
+                { id: 'lesson3', title: 'درس ۳: My Appearance (ظاهر من)', icon: 'fa-user-tag', ready: false },
+                { id: 'lesson4', title: 'درس ۴: My Family (خانواده من)', icon: 'fa-people-roof', ready: false },
+                { id: 'lesson5', title: 'درس ۵: My Clothes (پوشاک)', icon: 'fa-shirt', ready: false },
+                { id: 'lesson6', title: 'درس ۶: My House (خانه من)', icon: 'fa-house', ready: false },
+                { id: 'lesson7', title: 'درس ۷: My Food (غذا و نوشیدنی)', icon: 'fa-utensils', ready: false },
+                { id: 'lesson8', title: 'درس ۸: My Abilities (توانایی‌ها)', icon: 'fa-person-running', ready: false }
+            ];
+
+            container.innerHTML = items.map(item => `
+                <button onclick="selectLesson('${item.id}')" class="w-full text-right p-3 rounded-xl flex items-center justify-between text-sm transition ${
+                    currentLesson === item.id 
+                    ? 'bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 font-bold' 
+                    : 'hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300'
+                }">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid ${item.icon} text-base opacity-80"></i>
+                        <span>${item.title}</span>
+                    </div>
+                    ${!item.ready ? '<span class="text-[10px] px-2 py-0.5 rounded-md bg-slate-200 dark:bg-slate-800 text-slate-500">به‌زودی</span>' : ''}
+                </button>
+            `).join('');
+        }
+
+        function selectLesson(id) {
+            currentLesson = id;
+            renderDrawerLinks();
+            toggleMenu();
+
+            const headerSec = document.getElementById('sectionHeader');
+            const wordsView = document.getElementById('wordsView');
+            const page6View = document.getElementById('page6View');
+            const page8View = document.getElementById('page8View');
+            const dialogueView = document.getElementById('dialogueView');
+            const sentencesView = document.getElementById('sentencesView');
+            const minigameView = document.getElementById('minigameView');
+            const examView = document.getElementById('examView');
+            const numbersView = document.getElementById('numbersView');
+            const comingSoon = document.getElementById('comingSoonView');
+
+            [wordsView, page6View, page8View, dialogueView, sentencesView, minigameView, examView, numbersView, comingSoon].forEach(el => el.classList.add('hidden'));
+
+            if (id === 'numbers') {
+                headerSec.classList.add('hidden');
+                numbersView.classList.remove('hidden');
+                initNumberGame();
+                renderFullNumbers();
+                document.getElementById('headerSubtitle').textContent = 'بخش اختصاصی اعداد';
+                return;
+            }
+
+            if (id === 'welcome' || id === 'lesson1') {
+                headerSec.classList.remove('hidden');
+                const data = APP_DATA[id];
+                document.getElementById('currentBadge').textContent = data.badge;
+                document.getElementById('currentTitle').textContent = data.title;
+                document.getElementById('headerSubtitle').textContent = data.title;
+
+                // Adjust Page 6 and Page 8 buttons visibility for welcome vs lesson1
+                const p6Btn = document.getElementById('tab-page6');
+                const p8Btn = document.getElementById('tab-page8');
+                if (id === 'welcome') {
+                    if (p6Btn) p6Btn.classList.add('hidden');
+                    if (p8Btn) p8Btn.classList.add('hidden');
+                } else {
+                    if (p6Btn) p6Btn.classList.remove('hidden');
+                    if (p8Btn) p8Btn.classList.remove('hidden');
+                }
+
+                switchTab('words');
+                return;
+            }
+
+            // Coming soon for lessons 2-8
+            headerSec.classList.add('hidden');
+            comingSoon.classList.remove('hidden');
+            const names = {
+                lesson2: 'درس ۲: سن من (My Age)',
+                lesson3: 'درس ۳: ظاهر من (My Appearance)',
+                lesson4: 'درس ۴: خانواده من (My Family)',
+                lesson5: 'درس ۵: لباس‌های من (My Clothes)',
+                lesson6: 'درس ۶: خانه من (My House)',
+                lesson7: 'درس ۷: غذا و نوشیدنی (My Food)',
+                lesson8: 'درس ۸: توانایی‌های من (My Abilities)'
+            };
+            document.getElementById('comingSoonTitle').textContent = names[id] || 'این درس';
+            document.getElementById('headerSubtitle').textContent = 'به زودی...';
+        }
+
+        function switchTab(tabId) {
+            currentTab = tabId;
+            ['words', 'page6', 'page8', 'dialogue', 'sentences', 'minigame', 'exam'].forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                const view = document.getElementById(`${t}View`);
+                if (btn && view) {
+                    if (t === tabId) {
+                        btn.classList.add('bg-brand-600', 'text-white');
+                        btn.classList.remove('bg-slate-200', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+                        view.classList.remove('hidden');
+                    } else {
+                        btn.classList.remove('bg-brand-600', 'text-white');
+                        btn.classList.add('bg-slate-200', 'dark:bg-slate-800', 'text-slate-700', 'dark:text-slate-300');
+                        view.classList.add('hidden');
+                    }
+                }
+            });
+
+            if (tabId === 'words') renderWords();
+            if (tabId === 'page6') renderPage6();
+            if (tabId === 'page8') renderPage8();
+            if (tabId === 'dialogue') renderDialogues();
+            if (tabId === 'sentences') renderSentences();
+            if (tabId === 'minigame') initLessonGame();
+            if (tabId === 'exam') setupExamIntro();
+        }
+
+        /* =========================================================================
+           5. RENDERING CONTENT
+           ========================================================================= */
+        function getRoleAvatar(role) {
+            switch(role) {
+                case 'teacher_male':
+                    return '<div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-600 to-blue-500 text-white flex items-center justify-center text-lg shadow-md flex-shrink-0"><i class="fa-solid fa-person-chalkboard"></i></div>';
+                case 'teacher_female':
+                    return '<div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-pink-500 to-rose-400 text-white flex items-center justify-center text-lg shadow-md flex-shrink-0"><i class="fa-solid fa-chalkboard-user"></i></div>';
+                case 'student_boy':
+                    return '<div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-500 to-indigo-500 text-white flex items-center justify-center text-lg shadow-md flex-shrink-0"><i class="fa-solid fa-child"></i></div>';
+                case 'student_boy2':
+                    return '<div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-400 text-white flex items-center justify-center text-lg shadow-md flex-shrink-0"><i class="fa-solid fa-user-graduate"></i></div>';
+                case 'student_girl':
+                    return '<div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-500 to-fuchsia-400 text-white flex items-center justify-center text-lg shadow-md flex-shrink-0"><i class="fa-solid fa-child-dress"></i></div>';
+                default:
+                    return '<div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 text-white flex items-center justify-center text-lg shadow-md flex-shrink-0"><i class="fa-solid fa-users"></i></div>';
+            }
+        }
+
+        function getRoleBadge(role) {
+            switch(role) {
+                case 'teacher_male': return '<span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-100 dark:bg-cyan-950 text-cyan-700 dark:text-cyan-300 font-bold">👨‍🏫 معلم (Mr. Brown)</span>';
+                case 'teacher_female': return '<span class="text-[10px] px-2 py-0.5 rounded-full bg-pink-100 dark:bg-pink-950 text-pink-700 dark:text-pink-300 font-bold">👩‍🏫 معلم (Mrs. Green)</span>';
+                case 'student_boy': return '<span class="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300 font-bold">👦 دانش‌آموز (Tom Miller)</span>';
+                case 'student_boy2': return '<span class="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-bold">👦 دانش‌آموز (Ben)</span>';
+                case 'student_girl': return '<span class="text-[10px] px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 font-bold">👧 دانش‌آموز (Emma Adams)</span>';
+                default: return '<span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-bold">👥 هم‌کلاسی‌ها (Class)</span>';
+            }
+        }
+
+        function renderWords() {
+            const data = APP_DATA[currentLesson];
+            if (!data) return;
+            const grid = document.getElementById('wordsGrid');
+            document.getElementById('wordsCountBadge').textContent = `${data.words.length} کلمه کلیدی`;
+
+            grid.innerHTML = data.words.map(w => `
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between gap-3 hover:border-brand-500/40 transition">
+                    <div class="space-y-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-black text-base text-slate-900 dark:text-white tracking-wide">${w.en}</span>
+                            <span class="text-[11px] text-brand-600 dark:text-brand-400 font-semibold">«${w.pr}»</span>
+                        </div>
+                        <div class="text-sm font-bold text-slate-600 dark:text-slate-300">${w.fa}</div>
+                        ${w.note ? `<div class="text-[10px] text-slate-400">${w.note}</div>` : ''}
+                    </div>
+                    <button onclick="speakDirect('${w.en.replace(/'/g, "\\'")}', 'vocab', this)" class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-brand-950/60 hover:bg-brand-600 hover:text-white text-brand-600 dark:text-brand-400 flex items-center justify-center flex-shrink-0 transition">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        /* Page 6 Conversation Renderer */
+        function renderPage6() {
+            const data = APP_DATA.lesson1;
+            const container = document.getElementById('page6LinesList');
+
+            container.innerHTML = data.page6Conversation.map((line, idx) => `
+                <div class="p-3.5 sm:p-4 rounded-2xl ${
+                    line.role.includes('teacher') 
+                    ? 'bg-cyan-50/70 dark:bg-cyan-950/30 border border-cyan-200 dark:border-cyan-900/50' 
+                    : 'bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900/50'
+                } flex items-start justify-between gap-3 transition">
+                    <div class="flex items-start gap-3">
+                        ${getRoleAvatar(line.role)}
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">${line.speaker}:</span>
+                                ${getRoleBadge(line.role)}
+                            </div>
+                            <div class="text-sm sm:text-base font-black text-slate-900 dark:text-white">${line.text}</div>
+                            <div class="text-xs text-brand-600 dark:text-brand-400 font-medium">«${line.pr}»</div>
+                            <div class="text-xs text-slate-600 dark:text-slate-300 font-semibold">${line.fa}</div>
+                        </div>
+                    </div>
+                    <button id="page6-line-btn-${idx}" onclick="speakDirect('${line.text.replace(/'/g, "\\'")}', '${line.role}', this)" class="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 text-brand-600 shadow-sm hover:bg-brand-600 hover:text-white flex items-center justify-center flex-shrink-0 transition">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        /* Page 8 Sounds & Letters Renderer */
+        function renderPage8() {
+            const data = APP_DATA.lesson1;
+            const container = document.getElementById('page8LinesList');
+
+            container.innerHTML = data.page8Sounds.map((line, idx) => `
+                <div class="p-3.5 sm:p-4 rounded-2xl ${
+                    line.role.includes('teacher') 
+                    ? 'bg-rose-50/70 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50' 
+                    : 'bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50'
+                } flex items-start justify-between gap-3 transition">
+                    <div class="flex items-start gap-3">
+                        ${getRoleAvatar(line.role)}
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <span class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white">${line.speaker}:</span>
+                                ${getRoleBadge(line.role)}
+                            </div>
+                            <div class="text-sm sm:text-base font-black text-slate-900 dark:text-white tracking-wide">${line.text}</div>
+                            <div class="text-xs text-brand-600 dark:text-brand-400 font-medium">«${line.pr}»</div>
+                            <div class="text-xs text-slate-600 dark:text-slate-300 font-semibold">${line.fa}</div>
+                        </div>
+                    </div>
+                    <button id="page8-line-btn-${idx}" onclick="speakDirect('${line.text.replace(/'/g, "\\'")}', '${line.role}', this)" class="w-10 h-10 rounded-xl bg-white dark:bg-slate-800 text-brand-600 shadow-sm hover:bg-brand-600 hover:text-white flex items-center justify-center flex-shrink-0 transition">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        /* Facing/Opposite Dialogue Practices */
+        function renderDialogues() {
+            const data = APP_DATA[currentLesson];
+            if (!data) return;
+            const container = document.getElementById('dialoguesList');
+
+            container.innerHTML = data.dialoguePairs.map(sec => `
+                <div class="bg-white dark:bg-slate-800 rounded-3xl p-4 sm:p-6 border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+                    <div class="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-700 font-extrabold text-sm sm:text-base text-slate-800 dark:text-slate-100">
+                        <i class="fa-solid fa-comments text-brand-600"></i>
+                        <span>${sec.title}</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        ${sec.pairs.map(p => `
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3.5 items-stretch">
+                                <!-- First Speaker (Left) -->
+                                <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/70 border border-slate-200/80 dark:border-slate-800 flex flex-col justify-between space-y-2">
+                                    <div class="flex items-center justify-between gap-2">
+                                        <div class="flex items-center gap-2">
+                                            ${getRoleAvatar(p.left.role)}
+                                            <div>
+                                                <span class="text-xs font-bold text-slate-900 dark:text-white block">${p.left.sender}</span>
+                                                ${getRoleBadge(p.left.role)}
+                                            </div>
+                                        </div>
+                                        <button onclick="speakDirect('${p.left.text.replace(/'/g, "\\'")}', '${p.left.role}', this)" class="w-9 h-9 rounded-xl bg-white dark:bg-slate-800 text-brand-600 shadow-sm hover:bg-brand-600 hover:text-white flex items-center justify-center transition">
+                                            <i class="fa-solid fa-volume-high text-sm"></i>
+                                        </button>
+                                    </div>
+                                    <div class="space-y-0.5 pt-1">
+                                        <div class="font-extrabold text-sm text-slate-900 dark:text-white">${p.left.text}</div>
+                                        <div class="text-xs text-brand-600 dark:text-brand-400">«${p.left.pr}»</div>
+                                        <div class="text-xs text-slate-500 dark:text-slate-400 font-medium">${p.left.fa}</div>
+                                    </div>
+                                </div>
+
+                                <!-- Facing Responder (Right) -->
+                                <div class="p-3.5 rounded-2xl bg-brand-50/70 dark:bg-brand-950/40 border border-brand-200/60 dark:border-brand-900/60 flex flex-col justify-between space-y-2">
+                                    <div class="flex items-center justify-between gap-2">
+                                        <div class="flex items-center gap-2">
+                                            ${getRoleAvatar(p.right.role)}
+                                            <div>
+                                                <span class="text-xs font-bold text-slate-900 dark:text-white block">${p.right.sender} (پاسخ رو‌به‌رو)</span>
+                                                ${getRoleBadge(p.right.role)}
+                                            </div>
+                                        </div>
+                                        <button onclick="speakDirect('${p.right.text.replace(/'/g, "\\'")}', '${p.right.role}', this)" class="w-9 h-9 rounded-xl bg-white dark:bg-slate-800 text-emerald-600 shadow-sm hover:bg-emerald-600 hover:text-white flex items-center justify-center transition">
+                                            <i class="fa-solid fa-volume-high text-sm"></i>
+                                        </button>
+                                    </div>
+                                    <div class="space-y-0.5 pt-1">
+                                        <div class="font-extrabold text-sm text-slate-900 dark:text-white">${p.right.text}</div>
+                                        <div class="text-xs text-brand-600 dark:text-brand-400">«${p.right.pr}»</div>
+                                        <div class="text-xs text-slate-600 dark:text-slate-300 font-medium">${p.right.fa}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        /* Key Sentences with full sound support */
+        function renderSentences() {
+            const data = APP_DATA[currentLesson];
+            if (!data) return;
+            const container = document.getElementById('sentencesList');
+
+            container.innerHTML = data.sentences.map(s => `
+                <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between gap-3 hover:border-brand-500/40 transition">
+                    <div class="space-y-1">
+                        <div class="font-black text-sm text-slate-900 dark:text-white">${s.en}</div>
+                        <div class="text-xs text-brand-600 dark:text-brand-400">تلفظ فارسی: «${s.pr}»</div>
+                        <div class="text-xs font-semibold text-slate-600 dark:text-slate-300">ترجمه: ${s.fa}</div>
+                    </div>
+                    <button onclick="speakDirect('${s.en.replace(/'/g, "\\'")}', 'vocab', this)" class="w-10 h-10 rounded-xl bg-brand-50 dark:bg-slate-700 hover:bg-brand-600 hover:text-white text-brand-600 dark:text-brand-400 flex items-center justify-center flex-shrink-0 transition">
+                        <i class="fa-solid fa-volume-high"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        /* =========================================================================
+           6. LESSON MINI-GAME (DYNAMIC: ALL WORDS COVERED, NO REPETITION)
+           ========================================================================= */
+        let lessonGameTarget = null;
+        let lessonGameScore = 0;
+        let lessonGameRemainingWords = [];
+
+        function initLessonGame() {
+            const data = APP_DATA[currentLesson];
+            if (!data || !data.words || data.words.length === 0) return;
+
+            // Refill dynamic pool from ALL lesson words when empty
+            if (lessonGameRemainingWords.length === 0) {
+                lessonGameRemainingWords = [...data.words].sort(() => Math.random() - 0.5);
+            }
+
+            // Pick next non-repeated word
+            const currentItem = lessonGameRemainingWords.pop();
+            const isListening = Math.random() > 0.4; // 60% listening, 40% vocab question
+
+            // Build 3 distractors from the rest of the words
+            const otherWords = data.words.filter(w => w.en !== currentItem.en).sort(() => Math.random() - 0.5).slice(0, 3);
+            const options = [currentItem, ...otherWords].sort(() => Math.random() - 0.5);
+
+            lessonGameTarget = {
+                type: isListening ? 'listening' : 'vocab',
+                prompt: isListening ? 'به صدای کلمه گوش بده و معنی درست رو انتخاب کن:' : `معنی واژه «${currentItem.en}» کدام است؟`,
+                targetWord: currentItem.en,
+                targetFa: currentItem.fa,
+                correctValue: isListening ? currentItem.fa : currentItem.fa,
+                options: options.map(o => o.fa)
+            };
+
+            document.getElementById('lessonGamePrompt').textContent = lessonGameTarget.prompt;
+            document.getElementById('lessonGameDisplayWord').textContent = isListening ? currentItem.en : currentItem.en;
+            document.getElementById('lessonGameFeedback').textContent = '';
+            document.getElementById('gameScoreSpan').textContent = lessonGameScore;
+
+            const grid = document.getElementById('lessonGameOptions');
+            grid.innerHTML = lessonGameTarget.options.map(opt => `
+                <button onclick="checkLessonGameAnswer('${opt.replace(/'/g, "\\'")}')" class="p-3.5 rounded-xl bg-white/20 hover:bg-white text-white hover:text-emerald-700 font-black text-sm transition shadow-sm">
+                    ${opt}
+                </button>
+            `).join('');
+
+            // Automatically speak the word
+            setTimeout(() => speakDirect(currentItem.en, 'student_boy'), 300);
+        }
+
+        function playLessonGameAudio() {
+            if (!lessonGameTarget) return;
+            speakDirect(lessonGameTarget.targetWord, 'student_boy');
+        }
+
+        function checkLessonGameAnswer(selected) {
+            const feedback = document.getElementById('lessonGameFeedback');
+
+            if (selected === lessonGameTarget.correctValue) {
+                lessonGameScore += 5;
+                document.getElementById('gameScoreSpan').textContent = lessonGameScore;
+                feedback.className = "text-center font-black text-sm text-emerald-200";
+                feedback.innerHTML = '<i class="fa-solid fa-circle-check ml-1"></i> آفرین کاملاً درست پاسخ دادی!';
+                setTimeout(initLessonGame, 1200);
+            } else {
+                feedback.className = "text-center font-black text-sm text-rose-200";
+                feedback.innerHTML = '<i class="fa-solid fa-circle-xmark ml-1"></i> اشتباه بود! دوباره با دقت تلاش کن.';
+            }
+        }
+
+        /* =========================================================================
+           7. 20-QUESTION EXAM ENGINE
+           ========================================================================= */
+        let examQuestions = [];
+        let examIndex = 0;
+        let examScore = 0;
+        let examCorrect = 0;
+        let examWrong = 0;
+
+        function setupExamIntro() {
+            document.getElementById('examIntroCard').classList.remove('hidden');
+            document.getElementById('examActiveCard').classList.add('hidden');
+            document.getElementById('examResultCard').classList.add('hidden');
+            const data = APP_DATA[currentLesson];
+            document.getElementById('examTargetTitle').textContent = `آزمون استاندارد ۲۰ سوالی (${data.badge})`;
+        }
+
+        function generate20ExamQuestions() {
+            const data = APP_DATA[currentLesson];
+            const questions = [];
+
+            // 1. Vocabulary Questions (8 Qs)
+            const shuffledWords = [...data.words].sort(() => Math.random() - 0.5);
+            for (let i = 0; i < Math.min(8, shuffledWords.length); i++) {
+                const w = shuffledWords[i];
+                const distractors = data.words.filter(x => x.en !== w.en).sort(() => Math.random() - 0.5).slice(0, 3);
+                const opts = [w, ...distractors].sort(() => Math.random() - 0.5);
+                questions.push({
+                    type: 'vocab',
+                    questionText: `معنی کلمه انگلیسی <strong>«${w.en}»</strong> چیست؟`,
+                    target: w.fa,
+                    correctValue: w.fa,
+                    options: opts.map(o => o.fa)
+                });
+            }
+
+            // 2. Listening Questions (6 Qs)
+            for (let i = 0; i < Math.min(6, shuffledWords.length); i++) {
+                const w = shuffledWords[i];
+                const distractors = data.words.filter(x => x.en !== w.en).sort(() => Math.random() - 0.5).slice(0, 3);
+                const opts = [w, ...distractors].sort(() => Math.random() - 0.5);
+                questions.push({
+                    type: 'listening',
+                    voiceText: w.en,
+                    questionText: 'به صدای پخش‌شده گوش دهید و کلمه مربوطه را انتخاب کنید:',
+                    target: w.en,
+                    correctValue: w.en,
+                    options: opts.map(o => o.en)
+                });
+            }
+
+            // 3. Dialogue Completion Questions (4 Qs)
+            const convoPool = [...(data.conversationQuestions || [])];
+            convoPool.sort(() => Math.random() - 0.5);
+            for (let i = 0; i < Math.min(4, convoPool.length); i++) {
+                const c = convoPool[i];
+                questions.push({
+                    type: 'dialogue',
+                    questionText: `جای خالی را با پاسخ مناسب کامل کنید:<br><span class="text-brand-600 dark:text-brand-400 font-mono text-sm leading-relaxed">${c.q.replace(/\n/g, '<br>')}</span>`,
+                    target: c.correct,
+                    correctValue: c.correct,
+                    options: [...c.options].sort(() => Math.random() - 0.5)
+                });
+            }
+
+            // 4. Key Sentence Translation Questions (2 Qs)
+            const shuffledSentences = [...data.sentences].sort(() => Math.random() - 0.5);
+            while (questions.length < 20 && shuffledSentences.length > 0) {
+                const s = shuffledSentences.pop();
+                const fake = data.sentences.filter(x => x.en !== s.en).map(x => x.fa).slice(0, 3);
+                const opts = [s.fa, ...fake].sort(() => Math.random() - 0.5);
+                questions.push({
+                    type: 'sentence',
+                    questionText: `ترجمه صحیح جمله <strong>«${s.en}»</strong> کدام است؟`,
+                    target: s.fa,
+                    correctValue: s.fa,
+                    options: opts
+                });
+            }
+
+            return questions.slice(0, 20).sort(() => Math.random() - 0.5);
+        }
+
+        function startExam() {
+            examQuestions = generate20ExamQuestions();
+            examIndex = 0;
+            examScore = 0;
+            examCorrect = 0;
+            examWrong = 0;
+
+            document.getElementById('examIntroCard').classList.add('hidden');
+            document.getElementById('examResultCard').classList.add('hidden');
+            document.getElementById('examActiveCard').classList.remove('hidden');
+
+            renderCurrentExamQuestion();
+        }
+
+        function renderCurrentExamQuestion() {
+            if (examIndex >= examQuestions.length) {
+                finishExam();
+                return;
+            }
+
+            const q = examQuestions[examIndex];
+            document.getElementById('examProgressText').textContent = `سوال ${examIndex + 1} از ۲۰`;
+
+            const body = document.getElementById('examQuestionBody');
+
+            if (q.type === 'listening') {
+                body.innerHTML = `
+                    <div class="text-center py-2 space-y-3">
+                        <span class="text-xs font-bold text-amber-500">سوال شنیداری (Listening):</span>
+                        <div class="text-sm font-black text-slate-800 dark:text-white">${q.questionText}</div>
+                        <button onclick="speakDirect('${q.voiceText.replace(/'/g, "\\'")}', 'general', this)" class="mx-auto px-6 py-3 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold flex items-center gap-2 shadow-md">
+                            <i class="fa-solid fa-volume-high text-lg"></i>
+                            <span>پخش دوباره صدا</span>
+                        </button>
+                    </div>
+                `;
+                setTimeout(() => speakDirect(q.voiceText), 350);
+            } else {
+                body.innerHTML = `
+                    <div class="space-y-1.5">
+                        <span class="text-xs font-bold text-slate-400">سوال ${q.type === 'dialogue' ? 'مکالمه' : 'تستی'}:</span>
+                        <div class="text-sm sm:text-base font-extrabold text-slate-800 dark:text-white leading-relaxed">
+                            ${q.questionText}
+                        </div>
+                    </div>
+                `;
+            }
+
+            const grid = document.getElementById('examOptionsGrid');
+            grid.innerHTML = q.options.map(opt => `
+                <button onclick="checkExamAnswer('${opt.replace(/'/g, "\\'")}')" class="w-full text-right p-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-500 bg-slate-50 dark:bg-slate-900/60 font-bold text-sm text-slate-800 dark:text-slate-100 flex items-center justify-between transition group">
+                    <span>${opt}</span>
+                    <i class="fa-regular fa-circle text-slate-300 group-hover:text-brand-500"></i>
+                </button>
+            `).join('');
+        }
+
+        function checkExamAnswer(selectedVal) {
+            const q = examQuestions[examIndex];
+            const isCorrect = (selectedVal === q.correctValue);
+
+            if (isCorrect) {
+                examScore += 1;
+                examCorrect++;
+            } else {
+                examWrong++;
+            }
+
+            examIndex++;
+            renderCurrentExamQuestion();
+        }
+
+        function finishExam() {
+            document.getElementById('examActiveCard').classList.add('hidden');
+            const resCard = document.getElementById('examResultCard');
+            resCard.classList.remove('hidden');
+
+            document.getElementById('examCorrectCount').textContent = examCorrect;
+            document.getElementById('examWrongCount').textContent = examWrong;
+            document.getElementById('examFinalGrade').textContent = `${examScore} از ۲۰`;
+
+            const icon = document.getElementById('examResultBadgeIcon');
+            const header = document.getElementById('examScoreHeader');
+            const feedback = document.getElementById('examFeedbackText');
+
+            if (examScore >= 18) {
+                icon.className = "w-24 h-24 mx-auto rounded-3xl bg-emerald-100 dark:bg-emerald-950 text-emerald-500 flex items-center justify-center text-5xl shadow-md";
+                icon.innerHTML = '<i class="fa-solid fa-trophy"></i>';
+                header.textContent = `فوق‌العاده عالی! (نمره ${examScore} از ۲۰)`;
+                feedback.textContent = 'شگفت‌انگیز است! تسلط کاملی روی واژگان، مکالمات و مهارت شنیداری داری.';
+            } else if (examScore >= 14) {
+                icon.className = "w-24 h-24 mx-auto rounded-3xl bg-blue-100 dark:bg-blue-950 text-blue-500 flex items-center justify-center text-5xl shadow-md";
+                icon.innerHTML = '<i class="fa-solid fa-medal"></i>';
+                header.textContent = `بسیار خوب! (نمره ${examScore} از ۲۰)`;
+                feedback.textContent = 'آفرین! نمره قبولی بسیار خوبی گرفتی. با یک دور مرور کلمات به نمره ۲۰ کامل می‌رسی.';
+            } else {
+                icon.className = "w-24 h-24 mx-auto rounded-3xl bg-amber-100 dark:bg-amber-950 text-amber-500 flex items-center justify-center text-5xl shadow-md";
+                icon.innerHTML = '<i class="fa-solid fa-book-open-reader"></i>';
+                header.textContent = `نیاز به تمرین بیشتر (نمره ${examScore} از ۲۰)`;
+                feedback.textContent = 'اشکالی نداره! دوباره به تلفظ‌ها و مکالمات گوش بده و بار دیگر امتحان بده.';
+            }
+        }
+
+        /* =========================================================================
+           8. SPECIAL NUMBERS SECTION & GAME
+           ========================================================================= */
+        let currentNumberTarget = null;
+
+        function initNumberGame() {
+            const randomItem = NUMBERS_DATA[Math.floor(Math.random() * NUMBERS_DATA.length)];
+            currentNumberTarget = randomItem;
+
+            document.getElementById('gameNumberWord').textContent = randomItem.en;
+            document.getElementById('gameNumberPersian').textContent = `تلفظ فارسی: «${randomItem.pr}»`;
+            document.getElementById('gameFeedback').textContent = '';
+
+            const distractors = NUMBERS_DATA.filter(n => n.num !== randomItem.num).sort(() => Math.random() - 0.5).slice(0, 3);
+            const allOpts = [randomItem, ...distractors].sort(() => Math.random() - 0.5);
+
+            const grid = document.getElementById('numberGameOptions');
+            grid.innerHTML = allOpts.map(opt => `
+                <button onclick="checkNumberGame(${opt.num})" class="px-4 py-3 rounded-2xl bg-white/20 hover:bg-white text-white hover:text-indigo-600 font-black text-lg transition shadow-sm">
+                    ${opt.num}
+                </button>
+            `).join('');
+        }
+
+        function playNumberGameVoice() {
+            if (currentNumberTarget) {
+                speakDirect(currentNumberTarget.en);
+            }
+        }
+
+        function checkNumberGame(selectedNum) {
+            const feedback = document.getElementById('gameFeedback');
+            if (selectedNum === currentNumberTarget.num) {
+                feedback.className = "text-center font-black text-sm text-emerald-200";
+                feedback.innerHTML = '<i class="fa-solid fa-circle-check ml-1"></i> آفرین کاملاً درسته!';
+                setTimeout(initNumberGame, 1200);
+            } else {
+                feedback.className = "text-center font-black text-sm text-rose-200";
+                feedback.innerHTML = '<i class="fa-solid fa-circle-xmark ml-1"></i> اشتباه بود! دوباره تلاش کن.';
+            }
+        }
+
+        function renderFullNumbers() {
+            const grid = document.getElementById('fullNumbersGrid');
+            grid.innerHTML = NUMBERS_DATA.map(n => `
+                <div class="p-3 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm flex items-center justify-between gap-2">
+                    <div>
+                        <div class="flex items-center gap-1.5 font-black text-sm text-slate-800 dark:text-white">
+                            <span class="w-6 h-6 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs">${n.num}</span>
+                            <span>${n.en}</span>
+                        </div>
+                        <div class="text-[11px] text-brand-600 dark:text-brand-400">«${n.pr}»</div>
+                        <div class="text-xs text-slate-400 font-semibold">${n.fa}</div>
+                    </div>
+                    <button onclick="speakDirect('${n.en}')" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-brand-600 hover:text-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center transition">
+                        <i class="fa-solid fa-volume-high text-xs"></i>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        /* =========================================================================
+           9. UNIVERSAL SEARCH ENGINE
+           ========================================================================= */
+        function handleSearch(query) {
+            const resultsBox = document.getElementById('searchResults');
+            const q = query.trim().toLowerCase();
+
+            if (!q) {
+                resultsBox.classList.add('hidden');
+                resultsBox.innerHTML = '';
+                return;
+            }
+
+            const allWords = [
+                ...APP_DATA.welcome.words,
+                ...APP_DATA.lesson1.words,
+                ...NUMBERS_DATA.map(n => ({ en: n.en, fa: n.fa, pr: n.pr, note: `عدد ${n.num}` }))
+            ];
+
+            const matches = allWords.filter(item => 
+                item.en.toLowerCase().includes(q) || 
+                item.fa.includes(q) || 
+                (item.pr && item.pr.includes(q))
+            );
+
+            resultsBox.classList.remove('hidden');
+
+            if (matches.length === 0) {
+                resultsBox.innerHTML = `
+                    <div class="p-3 text-center text-xs text-slate-400">
+                        کلمه‌ای در کتاب پیدا نشد. برای شنیدن تلفظ مستقیم روی دکمه آبی «تلفظ» بالا بزنید.
+                    </div>
+                `;
+                return;
+            }
+
+            resultsBox.innerHTML = matches.slice(0, 6).map(m => `
+                <div class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-900/60 flex items-center justify-between gap-3 text-xs">
+                    <div>
+                        <div class="font-bold text-slate-900 dark:text-white text-sm">${m.en} <span class="text-brand-600 dark:text-brand-400 text-xs font-semibold">«${m.pr}»</span></div>
+                        <div class="text-slate-500 dark:text-slate-400 font-medium">${m.fa} ${m.note ? `(${m.note})` : ''}</div>
+                    </div>
+                    <button onclick="speakDirect('${m.en.replace(/'/g, "\\'")}')" class="px-2.5 py-1.5 rounded-lg bg-brand-50 hover:bg-brand-600 hover:text-white text-brand-600 dark:bg-slate-800 text-xs font-bold transition flex items-center gap-1">
+                        <i class="fa-solid fa-volume-high"></i>
+                        <span>شنیدن</span>
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        /* =========================================================================
+           10. THEME TOGGLER & APP INIT
+           ========================================================================= */
+        function toggleTheme() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+        }
+
+        window.onload = function() {
+            renderDrawerLinks();
+            selectLesson('lesson1');
+            
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    window.speechSynthesis.getVoices();
+                };
+            }
+        };
+    </script>
+</body>
+</html>
